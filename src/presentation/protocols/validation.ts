@@ -1,3 +1,3 @@
 export interface Validation {
-    validate (input: Record<string, unknown>): string
+    validate (input: unknown): string
 }
