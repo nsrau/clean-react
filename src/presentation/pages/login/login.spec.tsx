@@ -38,8 +38,8 @@ const populateEmailField = (sut: RenderResult, email = faker.internet.email()): 
 }
 
 const populatePasswordField = (sut: RenderResult, password = faker.internet.password()): void => {
-    const emailInput = sut.getByTestId('password')
-    fireEvent.input(emailInput, { target: { value: password } })
+    const passwordInput = sut.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: password } })
 }
 
 const simulateStatusForField = (sut: RenderResult, fieldName: string, validationError?: string): void => {
