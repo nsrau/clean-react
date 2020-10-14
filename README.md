@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/nsrau/clean-react.svg?branch=master)](https://travis-ci.org/nsrau/clean-react)
+[![Coverage Status](https://coveralls.io/repos/github/nsrau/clean-react/badge.svg?branch=master)](https://coveralls.io/github/nsrau/clean-react?branch=master)
 
 ReactJS, Typescript, Design Patterns, 
 Clean Architecture, SOLID, DRY, KISS, YAGNI and TDD
