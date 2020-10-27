@@ -5,13 +5,13 @@ import makeLoginValidation from './login-validation-factory'
 import makeLocalSaveAccessToken from '@/main/factories/useCases/save-access-token/local-save-access-token-factory'
 
 const makeLogin: React.FC = () => {
-    return (
-        <Login
-            authentication={makeRemoteAuthentication()}
-            validation={makeLoginValidation()}
-            saveAccessToken={makeLocalSaveAccessToken()}
-        />
-    )
+  return (
+    <Login
+      authentication={makeRemoteAuthentication()}
+      validation={makeLoginValidation()}
+      saveAccessToken={makeLocalSaveAccessToken()}
+    />
+  )
 }
 
 export default makeLogin
