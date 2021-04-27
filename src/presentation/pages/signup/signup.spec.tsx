@@ -4,7 +4,6 @@ import faker from 'faker'
 import { Helper, ValidationStub } from '@/presentation/test'
 import SignUp from './signup'
 
-
 type SutTypes = {
   sut: RenderResult
 }
@@ -27,7 +26,6 @@ const makeSut = (params?: SutParams): SutTypes => {
     sut
   }
 }
-
 
 const populateField = (sut: RenderResult, fieldName: string, value = faker.random.word()): void => {
   const input = sut.getByTestId(fieldName)

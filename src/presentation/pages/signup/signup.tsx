@@ -10,7 +10,7 @@ type Props = {
   validation: Validation
 }
 
-const SignUp: React.FC<Props> = ({ validation }) => {
+const SignUp: React.FC<Props> = ({ validation }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -24,7 +24,7 @@ const SignUp: React.FC<Props> = ({ validation }) => {
   useEffect(() => {
     setState({
       ...state,
-      nameError: validation.validate('name', state.name),
+      nameError: validation.validate('name', state.name)
     })
   }, [state.name])
 
