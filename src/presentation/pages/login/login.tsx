@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import Styles from './login-styles.scss'
+import Styles from './login-styles.css'
 import { LoginHeader, Footer, Input, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'

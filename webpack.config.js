@@ -11,7 +11,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', 'scss'],
+    extensions: ['.ts', '.tsx', '.js', '.css'],
     alias: {
       '@': path.join(__dirname, 'src')
     }
@@ -22,17 +22,17 @@ module.exports = {
       loader: 'ts-loader',
       exclude: /node_modules/
     }, {
-      test: /\.scss$/,
-      use: [{
-        loader: 'style-loader'
-      }, {
-        loader: 'css-loader',
-        options: {
-          modules: true
-        }
-      }, {
-        loader: 'sass-loader'
-      }]
+      test: /\.css$/i,
+      exclude: /node_modules/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+          },
+        },
+      ],
     }]
   },
   devServer: {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Styles from './signup-styles.scss'
+import Styles from './signup-styles.css'
 import { LoginHeader, Footer, Input, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 
