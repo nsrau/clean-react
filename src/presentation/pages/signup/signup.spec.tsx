@@ -4,6 +4,7 @@ import faker from 'faker'
 import { Helper, ValidationStub } from '@/presentation/test'
 import SignUp from './signup'
 
+
 type SutTypes = {
   sut: RenderResult
 }
