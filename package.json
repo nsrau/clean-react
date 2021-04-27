@@ -59,6 +59,10 @@
     "react-router-dom": "^5.2.0"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "*.js": "eslint --cache --fix",
+    "*.{ts,tsx}": [
+      "eslint 'src/**' --fix",
+      "npm run test:staged"
+    ]
   }
 }
