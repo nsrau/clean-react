@@ -3,13 +3,15 @@ import Styles from './signup-styles.css'
 import { LoginHeader, Footer, Input, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 
+const errorMsg = 'Mandatory field'
+
 const SignUp: React.FC = () => {
   const [state] = useState({
     isLoading: false,
-    nameError: 'Mandatory field',
-    emailError: 'Mandatory field',
-    passwordError: 'Mandatory field',
-    passwordConfirmationError: 'Mandatory field',
+    nameError: errorMsg,
+    emailError: errorMsg,
+    passwordError: errorMsg,
+    passwordConfirmationError: errorMsg,
     mainError: ''
   })
 
