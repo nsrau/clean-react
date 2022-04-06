@@ -12,7 +12,11 @@ type Props = {
   saveAccessToken: SaveAccessToken
 }
 
-const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }: Props) => {
+const Login: React.FC<Props> = ({
+  validation,
+  authentication,
+  saveAccessToken
+}: Props) => {
   const history = useHistory()
 
   const [state, setState] = useState({
@@ -38,7 +42,10 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
       if (state.isLoading || state.emailError || state.passwordError) {
         return
       }
-      setState({ ...state, isLoading: true })
+      setState({
+        ...state,
+        isLoading: true
+      })
       const account = await authentication.auth({
         email: state.email,
         password: state.password
@@ -56,20 +63,24 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
 
   return (
     <div className={Styles.login}>
-      <LoginHeader />
-      <Context.Provider value={{ state, setState }}>
+      <LoginHeader/>
+      <Context.Provider value={{
+        state,
+        setState
+      }}>
         <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
-          <Input type="email" name="email" placeholder="insert your email" />
-          <Input type="password" name="password" placeholder="insert your password" />
+          <Input type="email" name="email" placeholder="insert your email"/>
+          <Input type="password" name="password" placeholder="insert your password"/>
           <button data-testid="submit"
-            disabled={!!state.emailError || !!state.passwordError}
-            className={Styles.submit} type="submit">Submit</button>
-          <Link data-testid="signup" to="/signup" className={Styles.link}>Create account</Link>
-          <FormStatus />
+                  disabled={!!state.emailError || !!state.passwordError}
+                  className={Styles.submit} type="submit">Submit
+          </button>
+          <Link data-testid="signup-link" to="/signup" className={Styles.link}>Create account</Link>
+          <FormStatus/>
         </form>
       </Context.Provider>
-      <Footer />
+      <Footer/>
     </div>
   )
 }
