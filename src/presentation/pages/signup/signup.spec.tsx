@@ -14,11 +14,6 @@ type SutParams = {
   validationError: string
 }
 
-const testElementText = (sut: RenderResult, fieldName: string, text: string): void => {
-  const element = sut.getByTestId(fieldName)
-  expect(element.textContent).toBe(text)
-}
-
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
@@ -96,13 +91,13 @@ describe('SignUp Component', () => {
     Helper.testStatusForField(sut, 'email')
   })
 
-  test('Should show valid password state if Validationn succeeds', () => {
+  test('Should show valid password state if Validation succeeds', () => {
     const { sut } = makeSut()
     Helper.populateField(sut, 'password')
     Helper.testStatusForField(sut, 'password')
   })
 
-  test('Should show valid passwordConfirmation state if Validationn succeeds', () => {
+  test('Should show valid passwordConfirmation state if Validation succeeds', () => {
     const { sut } = makeSut()
     Helper.populateField(sut, 'passwordConfirmation')
     Helper.testStatusForField(sut, 'passwordConfirmation')
@@ -156,7 +151,7 @@ describe('SignUp Component', () => {
     const error = new EmailInUseError()
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
     await simulateValidSubmit(sut)
-    testElementText(sut, 'main-error', error.message)
+    Helper.testElementText(sut, 'main-error', error.message)
     Helper.testChildCount(sut, 'error-wrap', 1)
   })
 })
