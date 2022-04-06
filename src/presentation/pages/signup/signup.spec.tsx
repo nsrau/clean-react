@@ -1,38 +1,53 @@
 import React from 'react'
-import { render, RenderResult, cleanup, fireEvent, waitFor } from '@testing-library/react'
+import { Router } from 'react-router-dom'
+import {
+  render,
+  RenderResult,
+  cleanup,
+  fireEvent,
+  waitFor
+} from '@testing-library/react'
 import faker from 'faker'
-import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
+import { createMemoryHistory } from 'history'
+import { Helper, ValidationStub, AddAccountSpy, SaveAccessTokenMock } from '@/presentation/test'
 import SignUp from './signup'
 import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
   validationError: string
 }
 
+const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
   const addAccountSpy = new AddAccountSpy()
-
+  const saveAccessTokenMock = new SaveAccessTokenMock()
   const sut = render(
-    <SignUp
-      validation={validationStub}
-      addAccount={addAccountSpy}
-    />
+    <Router history={history}>
+      <SignUp validation={validationStub} addAccount={addAccountSpy} saveAccessToken={saveAccessTokenMock}/>
+    </Router>
   )
 
   return {
     sut,
-    addAccountSpy
+    addAccountSpy,
+    saveAccessTokenMock
   }
 }
 
-const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.email(), password = faker.internet.password(), name = faker.name.findName()): Promise<void> => {
+const simulateValidSubmit = async (
+  sut: RenderResult,
+  email = faker.internet.email(),
+  password = faker.internet.password(),
+  name = faker.name.findName()
+): Promise<void> => {
   Helper.populateField(sut, 'email', email)
   Helper.populateField(sut, 'password', password)
   Helper.populateField(sut, 'passwordConfirmation', password)
@@ -119,19 +134,28 @@ describe('SignUp Component', () => {
   })
 
   test('Should call AddAccount with correct values', async () => {
-    const { sut, addAccountSpy } = makeSut()
+    const {
+      sut,
+      addAccountSpy
+    } = makeSut()
     const name = faker.name.findName()
     const email = faker.internet.email()
     const password = faker.internet.password()
 
     await simulateValidSubmit(sut, email, password, name)
     expect(addAccountSpy.params).toEqual({
-      name, email, password, passwordConfirmation: password
+      name,
+      email,
+      password,
+      passwordConfirmation: password
     })
   })
 
   test('Should call AddAccount only once', async () => {
-    const { sut, addAccountSpy } = makeSut()
+    const {
+      sut,
+      addAccountSpy
+    } = makeSut()
 
     await simulateValidSubmit(sut)
     await simulateValidSubmit(sut)
@@ -140,18 +164,38 @@ describe('SignUp Component', () => {
 
   test('Should not call AddAccount if form is invalid', async () => {
     const validationError = faker.random.words()
-    const { sut, addAccountSpy } = makeSut({ validationError })
+    const {
+      sut,
+      addAccountSpy
+    } = makeSut({ validationError })
 
     await simulateValidSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(0)
   })
 
   test('Should present error if AddAccount fails', async () => {
-    const { sut, addAccountSpy } = makeSut()
+    const {
+      sut,
+      addAccountSpy
+    } = makeSut()
     const error = new EmailInUseError()
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
     await simulateValidSubmit(sut)
     Helper.testElementText(sut, 'main-error', error.message)
     Helper.testChildCount(sut, 'error-wrap', 1)
+  })
+
+  test('Should call SaveAccessToken on success', async () => {
+    const {
+      sut,
+      addAccountSpy,
+      saveAccessTokenMock
+    } = makeSut()
+    await simulateValidSubmit(sut)
+    expect(saveAccessTokenMock.accessToken).toBe(
+      addAccountSpy.account.accessToken
+    )
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
   })
 })
