@@ -6,3 +6,4 @@ public/js
 **.map
 .husky
 yarn.lock
+.idea
