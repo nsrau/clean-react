@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import Styles from './login-styles.css'
-import { LoginHeader, Footer, Input, FormStatus } from '@/presentation/components'
+import { LoginHeader, Footer, Input, FormStatus, SubmitButton } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication, SaveAccessToken } from '@/domain/usecases'
@@ -21,6 +21,7 @@ const Login: React.FC<Props> = ({
 
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     email: '',
     password: '',
     emailError: '',
@@ -29,17 +30,21 @@ const Login: React.FC<Props> = ({
   })
 
   useEffect(() => {
+    const emailError = validation.validate('email', state.email)
+    const passwordError = validation.validate('password', state.password)
+
     setState({
       ...state,
-      emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password)
+      emailError,
+      passwordError,
+      isFormInvalid: !!emailError || !!passwordError
     })
   }, [state.email, state.password])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
-      if (state.isLoading || state.emailError || state.passwordError) {
+      if (state.isLoading || state.isFormInvalid) {
         return
       }
       setState({
@@ -72,10 +77,7 @@ const Login: React.FC<Props> = ({
           <h2>Login</h2>
           <Input type="email" name="email" placeholder="insert your email"/>
           <Input type="password" name="password" placeholder="insert your password"/>
-          <button data-testid="submit"
-                  disabled={!!state.emailError || !!state.passwordError}
-                  className={Styles.submit} type="submit">Submit
-          </button>
+          <SubmitButton text={'submit'}/>
           <Link data-testid="signup-link" to="/signup" className={Styles.link}>Create account</Link>
           <FormStatus/>
         </form>
