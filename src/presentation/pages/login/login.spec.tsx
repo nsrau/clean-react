@@ -105,16 +105,25 @@ describe('Login Component', () => {
   })
 
   test('Should call Authentication with correct values', async () => {
-    const { sut, authenticationSpy } = makeSut()
+    const {
+      sut,
+      authenticationSpy
+    } = makeSut()
     const email = faker.internet.email()
     const password = faker.internet.password()
 
     await simulateValidSubmit(sut, email, password)
-    expect(authenticationSpy.params).toEqual({ email, password })
+    expect(authenticationSpy.params).toEqual({
+      email,
+      password
+    })
   })
 
   test('Should call Authentication only once', async () => {
-    const { sut, authenticationSpy } = makeSut()
+    const {
+      sut,
+      authenticationSpy
+    } = makeSut()
 
     await simulateValidSubmit(sut)
     await simulateValidSubmit(sut)
@@ -123,14 +132,20 @@ describe('Login Component', () => {
 
   test('Should not call Authentication if form is invalid', async () => {
     const validationError = faker.random.words()
-    const { sut, authenticationSpy } = makeSut({ validationError })
+    const {
+      sut,
+      authenticationSpy
+    } = makeSut({ validationError })
     Helper.populateField(sut, 'email')
     await simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(0)
   })
 
   test('Should present error if Authentication fails', async () => {
-    const { sut, authenticationSpy } = makeSut()
+    const {
+      sut,
+      authenticationSpy
+    } = makeSut()
     const error = new InvalidCredentialsError()
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error)
     await simulateValidSubmit(sut)
@@ -139,7 +154,11 @@ describe('Login Component', () => {
   })
 
   test('Should call SaveAccessToken on success', async () => {
-    const { sut, authenticationSpy, saveAccessTokenMock } = makeSut()
+    const {
+      sut,
+      authenticationSpy,
+      saveAccessTokenMock
+    } = makeSut()
     await simulateValidSubmit(sut)
     expect(saveAccessTokenMock.accessToken).toBe(authenticationSpy.account.accessToken)
     expect(history.length).toBe(1)
@@ -147,9 +166,12 @@ describe('Login Component', () => {
   })
 
   test('Should present error if SaveAccessToken fails', async () => {
-    const { sut, saveAccessTokenMock } = makeSut()
+    const {
+      sut,
+      saveAccessTokenMock
+    } = makeSut()
     const error = new InvalidCredentialsError()
-    jest.spyOn(saveAccessTokenMock, 'save').mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error)
     await simulateValidSubmit(sut)
     Helper.testChildCount(sut, 'error-wrap', 1)
     Helper.testElementText(sut, 'main-error', error.message)
